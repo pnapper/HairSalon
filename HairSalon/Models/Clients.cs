@@ -8,11 +8,13 @@ namespace HairSalon.Models
   {
     private int _id;
     private string _name;
+    private int _stylistId;
 
-    public Client(string name, int Id = 0)
+    public Client(string name, int stylistId, int Id = 0)
     {
       _id = Id;
       _name = name;
+      _stylistId = stylistId;
     }
 
     public int GetId()
@@ -23,6 +25,11 @@ namespace HairSalon.Models
     public string GetName()
     {
       return _name;
+    }
+
+    public int GetStylistId()
+    {
+      return _stylistId;
     }
 
     public override bool Equals(System.Object otherClient)
@@ -36,14 +43,42 @@ namespace HairSalon.Models
         Client newClient = (Client) otherClient;
         bool idEquality = (this.GetId() == newClient.GetId());
         bool nameEquality = (this.GetName() == newClient.GetName());
+        bool stylistIdEquality = (this.GetStylistId() == newClient.GetStylistId());
 
-        return (nameEquality && idEquality);
+        return (nameEquality && stylistIdEquality && idEquality);
       }
     }
 
     public override int GetHashCode()
     {
       return this.GetType().GetHashCode();
+    }
+
+    public void Save()
+    {
+      MySqlConnection conn = DB.Connection();
+      conn.Open();
+
+      var cmd = conn.CreateCommand() as MySqlCommand;
+      cmd.CommandText = @"INSERT INTO clients (name, stylist_id) VALUES (@name, @stylist_id);";
+
+      MySqlParameter name = new MySqlParameter();
+      name.ParameterName = "@name";
+      name.Value = this._name;
+      cmd.Parameters.Add(name);
+
+      MySqlParameter stylist_id = new MySqlParameter();
+      stylist_id.ParameterName = "@stylist_id";
+      stylist_id.Value = this._stylistId;
+      cmd.Parameters.Add(stylist_id);
+
+      cmd.ExecuteNonQuery();
+      _id = (int) cmd.LastInsertedId;
+      conn.Close();
+      if (conn != null)
+      {
+        conn.Dispose();
+      }
     }
 
     public static List<Client> GetAll()
@@ -58,8 +93,9 @@ namespace HairSalon.Models
       {
         int clientId = rdr.GetInt32(0);
         string clientName = rdr.GetString(1);
+        int clientStylistId = rdr.GetInt32(2);
 
-        Client newClient = new Client(clientName, clientId);
+        Client newClient = new Client(clientName, clientStylistId, clientId);
         allClients.Add(newClient);
       }
       conn.Close();
