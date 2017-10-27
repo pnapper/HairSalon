@@ -17,6 +17,27 @@ namespace HairSalon.Models
       _stylistId = stylistId;
     }
 
+    public override bool Equals(System.Object otherClient)
+    {
+      if (!(otherClient is Client))
+      {
+        return false;
+      }
+      else
+      {
+        Client newClient = (Client) otherClient;
+        bool idEquality = (this.GetId() == newClient.GetId());
+        bool nameEquality = (this.GetName() == newClient.GetName());
+
+        return (nameEquality && idEquality);
+      }
+    }
+
+    public override int GetHashCode()
+    {
+      return this.GetType().GetHashCode();
+    }
+
     public int GetId()
     {
       return _id;
@@ -30,28 +51,6 @@ namespace HairSalon.Models
     public int GetStylistId()
     {
       return _stylistId;
-    }
-
-    public override bool Equals(System.Object otherClient)
-    {
-      if (!(otherClient is Client))
-      {
-        return false;
-      }
-      else
-      {
-        Client newClient = (Client) otherClient;
-        bool idEquality = (this.GetId() == newClient.GetId());
-        bool nameEquality = (this.GetName() == newClient.GetName());
-        bool stylistIdEquality = (this.GetStylistId() == newClient.GetStylistId());
-
-        return (nameEquality && stylistIdEquality && idEquality);
-      }
-    }
-
-    public override int GetHashCode()
-    {
-      return this.GetType().GetHashCode();
     }
 
     public void Save()
@@ -95,8 +94,10 @@ namespace HairSalon.Models
         string clientName = rdr.GetString(1);
         int clientStylistId = rdr.GetInt32(2);
 
+
         Client newClient = new Client(clientName, clientStylistId, clientId);
         allClients.Add(newClient);
+        //Console.WriteLine(clientId);
       }
       conn.Close();
 
@@ -105,20 +106,6 @@ namespace HairSalon.Models
         conn.Dispose();
       }
       return allClients;
-    }
-
-    public static void DeleteAll()
-    {
-      MySqlConnection conn = DB.Connection();
-      conn.Open();
-      var cmd = conn.CreateCommand() as MySqlCommand;
-      cmd.CommandText = @"DELETE FROM clients;";
-      cmd.ExecuteNonQuery();
-      conn.Close();
-      if (conn != null)
-      {
-        conn.Dispose();
-      }
     }
 
     public static Client Find(int id)
@@ -179,6 +166,20 @@ namespace HairSalon.Models
       if (conn != null)
       {
           conn.Dispose();
+      }
+    }
+
+    public static void DeleteAll()
+    {
+      MySqlConnection conn = DB.Connection();
+      conn.Open();
+      var cmd = conn.CreateCommand() as MySqlCommand;
+      cmd.CommandText = @"DELETE FROM clients;";
+      cmd.ExecuteNonQuery();
+      conn.Close();
+      if (conn != null)
+      {
+        conn.Dispose();
       }
     }
 

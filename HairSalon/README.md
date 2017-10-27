@@ -59,15 +59,15 @@
    Sample Input: 2
    Sample Output: "Paul Mitchell"
 
- ## GitHub Pages address:
+ ## GitHub Link: https://github.com/pnapper/HairSalon.git
 
  ## Setup
 
  * _Clone this repository_
  In MySQL:
  USE patrick_napper;
-
-
+ Open App in any browser;
+ Enjoy!;
 
  ## Technologies Used
 

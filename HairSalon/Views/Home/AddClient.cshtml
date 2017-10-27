@@ -1,10 +1,10 @@
 <h1>Add a Client</h1>
 
-<form action="/client/list" method="post">
+<form action="/@Model.GetName()/@Model.GetId()/client/list" method="post">
   <label for="client-name">New Client</label>
   <input type="text" name="client-name" class="form-control">
   <button type="submit" class="btn" name="button">Add Client</button>
 </form>
 
-<a href="/client/list">View Clients</a>
+<a href="/@Model.GetName()/@Model.GetId()/client/list">View Clients</a>
 <a href="/">Homepage</a>
