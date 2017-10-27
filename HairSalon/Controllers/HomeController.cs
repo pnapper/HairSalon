@@ -34,5 +34,21 @@ namespace HairSalonApp.Controllers
     {
       return View();
     }
+
+    [HttpGet("/{name}/{id}/clientlist")]
+    public ActionResult ViewClientList(int id)
+    {
+
+      Dictionary<string, object> model = new Dictionary<string, object>();
+
+      Stylist selectedStylist = Stylist.Find(id);
+      List<Client> stylistClients = selectedStylist.GetClients();
+
+      model.Add("stylist", selectedStylist);
+      model.Add("client", stylistClients);
+
+      // Return the restaurant list
+      return View("StylistDetail", model);
+    }
   }
 }
