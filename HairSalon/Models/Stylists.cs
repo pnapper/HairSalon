@@ -51,18 +51,53 @@ namespace HairSalon.Models
       return _id;
     }
 
+    public List<Client> GetClients()
+    {
+      List<Client> allStylistClients = new List<Client> {};
+      MySqlConnection conn = DB.Connection();
+      conn.Open();
+      var cmd = conn.CreateCommand() as MySqlCommand;
+      cmd.CommandText = @"SELECT * FROM clients WHERE stylist_id = @stylist_id;";
+
+      MySqlParameter stylistId = new MySqlParameter();
+      stylistId.ParameterName = "@stylist_id";
+      stylistId.Value = this._id;
+      cmd.Parameters.Add(stylistId);
+
+      var rdr = cmd.ExecuteReader() as MySqlDataReader;
+      while (rdr.Read())
+      {
+        int clientId = rdr.GetInt32(0);
+        string clientName = rdr.GetString(1);
+
+        Client newClient = new Client(clientName, clientId);
+        allStylistClients.Add(newClient);
+      }
+      conn.Close();
+      if (conn != null)
+      {
+        conn.Dispose();
+      }
+      return allStylistClients;
+    }
+
     public void Save()
     {
       MySqlConnection conn = DB.Connection();
       conn.Open();
 
       var cmd = conn.CreateCommand() as MySqlCommand;
-      cmd.CommandText = @"INSERT INTO stylists (name) VALUES (@name);";
+      cmd.CommandText = @"INSERT INTO stylists (name, specialty) VALUES (@name, @specialty);";
 
       MySqlParameter name = new MySqlParameter();
       name.ParameterName = "@name";
       name.Value = this._name;
       cmd.Parameters.Add(name);
+
+      MySqlParameter specialty = new MySqlParameter();
+      specialty.ParameterName = "@specialty";
+      specialty.Value = this._specialty;
+      cmd.Parameters.Add(specialty);
 
       cmd.ExecuteNonQuery();
       _id = (int) cmd.LastInsertedId;

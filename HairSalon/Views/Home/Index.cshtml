@@ -1,0 +1,25 @@
+<h1>Epic Cutz Hair Salon</h1>
+
+@if (@Model["stylist"].Count == 0)
+{
+  <h3>No stylists have been added yet!</h3>
+}
+
+<table>
+<tr>
+  <th><strong>Id</strong></th>
+  <th><strong>Name</strong></th>
+  <th><strong>Specialty</strong></th>
+</tr>
+
+@foreach (var stylist in  @Model["stylist"])
+{
+  <tr>
+    <th>@stylist.GetId()</th>
+    <th>@stylist.GetName()</th>
+    <th>@stylist.GetSpecialty()</th>
+  </tr>
+}
+</table>
+
+<a href="/stylist/add">Add a Stylist</a> <br>
