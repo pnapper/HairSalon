@@ -49,15 +49,7 @@ namespace HairSalonApp.Controllers
       return View("StylistDetail", model);
     }
 
-    [HttpGet("/stylist/{id}/client/add")]
-    public ActionResult AddClient(int id)
-    {
-      Stylist selectedStylist = Stylist.Find(id);
-
-      return View(selectedStylist);
-    }
-
-    [HttpPost("/stylist/{id}/client/list")]
+    [HttpPost("/{name}/{id}/client/list")]
     public ActionResult AddClientViewClientList(int id)
     {
       Client newClient = new Client(Request.Form["client-name"], id);
@@ -73,7 +65,15 @@ namespace HairSalonApp.Controllers
       return View("StylistDetail", model);
     }
 
-    [HttpGet("/client/{id}/edit")]
+    [HttpGet("/stylist/{id}/client/add")]
+    public ActionResult AddClient(int id)
+    {
+      Stylist selectedStylist = Stylist.Find(id);
+
+      return View(selectedStylist);
+    }
+
+    [HttpGet("/{name}/{id}/edit")]
     public ActionResult ClientEdit(int id)
     {
       Client thisClient = Client.Find(id);
@@ -81,7 +81,7 @@ namespace HairSalonApp.Controllers
       return View(thisClient);
     }
 
-    [HttpPost("/client/{id}/edit")]
+    [HttpPost("/{name}/{id}/edit")]
     public ActionResult ClientEditConfirm(int id)
     {
       Client thisClient = Client.Find(id);

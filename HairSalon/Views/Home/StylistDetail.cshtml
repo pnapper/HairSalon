@@ -10,17 +10,21 @@
     <tr>
       <th>Id</th>
       <th>Client</th>
+      <th>Edit</th>
+      <th>Delete</th>
     </tr>
     @foreach (var client in Model["client"])
   {
     <tr>
     <td>@client.GetId()</td>
-    <td>@client.GetName() | <a href="/@client.GetName()/@client.GetId()/client/delete">Delete</a> | <a href="/client/@client.GetId()/edit">Edit</a></td>
+    <td>@client.GetName()</td>
+    <th><a href="/client()/@client.GetId()/edit">Edit</a></th>
+    <th><a href="/client()/@client.GetId()/client/delete">Delete</a></th>
     </tr>
   }
   </table>
 }
 <br>
-  <a href="stylist/@Model["stylist"].GetId()/client/add">Add Client</a>
+  <a href="/stylist/@Model["stylist"].GetId()/client/add">Add Client</a>
   <a href="/">Homepage</a>
 </body>
