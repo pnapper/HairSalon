@@ -19,6 +19,20 @@ namespace HairSalonApp.Controllers
       return View("Index", model);
     }
 
+    [HttpGet("/stylist/add")]
+    public ActionResult AddStylist()
+    {
+      return View();
+    }
+
+    [HttpGet("/stylist/list")]
+    public ActionResult ReadStylist()
+    {
+      List<Stylist> allStylists = Stylist.GetAll();
+
+      return View("ViewStylist", allStylists);
+    }
+
     [HttpPost("/stylist/list")]
     public ActionResult WriteStylists()
     {
@@ -26,34 +40,12 @@ namespace HairSalonApp.Controllers
       newStylist.Save();
       List<Stylist> allStylists = Stylist.GetAll();
 
-      return View("Index", allStylists);
-    }
-
-    [HttpGet("/stylist/add")]
-    public ActionResult AddStylist()
-    {
-      return View();
+      return View("ViewStylist", allStylists);
     }
 
     [HttpGet("/{name}/{id}/client/list")]
     public ActionResult ViewClientList(int id)
     {
-      Dictionary<string, object> model = new Dictionary<string, object>();
-
-      Stylist selectedStylist = Stylist.Find(id);
-      List<Client> stylistClients = selectedStylist.GetClients();
-
-      model.Add("stylist", selectedStylist);
-      model.Add("client", stylistClients);
-
-      return View("StylistDetail", model);
-    }
-
-    [HttpPost("/{name}/{id}/client/list")]
-    public ActionResult AddClientViewClientList(int id)
-    {
-      Client newClient = new Client(Request.Form["client-name"], id);
-      newClient.Save();
       Dictionary<string, object> model = new Dictionary<string, object>();
 
       Stylist selectedStylist = Stylist.Find(id);
@@ -71,6 +63,22 @@ namespace HairSalonApp.Controllers
       Stylist selectedStylist = Stylist.Find(id);
 
       return View(selectedStylist);
+    }
+
+    [HttpPost("/{name}/{id}/client/list")]
+    public ActionResult AddClientViewClientList(int id)
+    {
+      Client newClient = new Client(Request.Form["client-name"], id);
+      newClient.Save();
+      Dictionary<string, object> model = new Dictionary<string, object>();
+
+      Stylist selectedStylist = Stylist.Find(id);
+      List<Client> stylistClients = selectedStylist.GetClients();
+
+      model.Add("stylist", selectedStylist);
+      model.Add("client", stylistClients);
+
+      return View("StylistDetail", model);
     }
 
     [HttpGet("/{name}/{id}/edit")]

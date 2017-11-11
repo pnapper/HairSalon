@@ -1,10 +1,17 @@
+@{
+  Layout = "_Layout";
+}
+
 <h1>Add a Client</h1>
 
 <form action="/stylist/@Model.GetId()/client/list" method="post">
   <label for="client-name">New Client:</label>
   <input type="text" name="client-name" class="form-control">
-  <button type="submit" class="btn" name="button">Add Client</button>
+  <br>
+  <button type="submit" class="btn btn-success" name="button" >Add Client</button>
+  <br>
 </form>
 
-<a href="/@Model.GetId()/client/list">View Clients</a>
-<a href="/">Homepage</a>
+
+<a href="/@Model.GetId()/client/list" class="btn btn-primary" role="button">View Clients</a>
+<a href="/" class="btn btn-info" role="button">Homepage</a>
